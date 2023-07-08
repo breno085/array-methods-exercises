@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Methods</title>
+</head>
+<body>
+    <script>
+    //https://javascript.info/array-methods#tasks -> Array methods exercises
+    //Ex 1 - Translate border-left-width to borderLeftWidth
+    function camelize(arg){
+        let arr = arg.split('-');
+        for (let i = 1; i < arr.length; i++){
+        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+        }
+    return arr.join('');
+    }
+
+    //console.log(camelize("list-style-image"));
+    //console.log(camelize("-webkit-transition"));
+
+    //Ex 2 - Filter range
+    function filterRange(arr, a, b){
+        return arr.filter(item => (item >= a && item <= b));
+    }
+
+    //let arr = [5, 3, 8, 1];
+    //alert( filterRange(arr, 1, 4) ); // 3,1 (matching values)
+
+    //Ex 3 - Filter range "in place"
+    function filterRangeInPlace(arr, a, b){
+        for (let i = 0; i < arr.length; i++){
+            if (arr[i] < a || arr[i] > b){
+                arr.splice(i, 1);
+            }
+        }
+    }
+    // let arr = [5, 3, 8, 1];
+
+    // filterRangeInPlace(arr, 1, 4); // removed the numbers except from 1 to 4
+
+    // alert( arr ); // [3, 1]
+
+    //Ex 4 - Sort in decreasing order
+    // let arr = [5, 2, 1, -10, 8];
+
+    function sortDecreasing(arr){
+        arr.sort((a, b) => {
+            if (a > b) return -1;
+            if (a == b) return 0;
+            if (a < b) return 1;
+        }
+        );
+    }
+
+    // sortDecreasing(arr);
+
+    // alert( arr ); // 8, 5, 2, 1, -10
+
+    //Ex 5 - Copy and sort array
+    // let arr = ["HTML", "JavaScript", "CSS"];
+
+    function sortArr(arr){
+        return arr.slice().sort();
+    }
+
+    // let sorted = sortArr(arr);
+    // alert( sorted ); // CSS, HTML, JavaScript
+    // alert( arr ); // HTML, JavaScript, CSS (no changes)
+
+    //Ex 6 - Create an extendable calculator
+    //Another way to solve this problem
+    // function Calculator(){
+    //     this.calculate = function (str){
+    //         for (let i = 0; i < str.length; i++){
+    //             if (str[i] === "+"){
+    //                 let sum = +(str.slice(0, i).toString()) + +(str.slice(i + 1).toString());
+    //                 return sum;
+    //             } else if (str[i] === "-"){
+    //                 let sub = +(str.slice(0, i).toString()) - +(str.slice(i + 1).toString());
+    //                 return sub;
+    //             } else if (str[i] === "*" && str[i + 1] != "*"){
+    //                 let mult = +(str.slice(0, i).toString()) * +(str.slice(i + 1).toString());
+    //                 return mult;
+    //             } else if (str[i] === "/"){
+    //                 let div = +(str.slice(0, i).toString()) / +(str.slice(i + 1).toString());
+    //                 return div;
+    //             } else if (str[i] === "*" && str[i + 1] === "*"){
+    //                 let exp = str.slice(0, i).toString() ** str.slice(i + 2).toString();
+    //                 return exp;
+    //             }
+    //         }
+    //     }
+    // }
+
+    function Calculator() {
+
+    this.methods = {
+    "-": (a, b) => a - b,
+    "+": (a, b) => a + b,
+    "*": (a, b) => a * b,
+    "/": (a, b) => a / b,
+    "**": (a, b) => a ** b
+    };
+
+    this.calculate = function(str) {
+
+    let split = str.split(' '),
+        a = +split[0],
+        op = split[1],
+        b = +split[2];
+
+    if (!this.methods[op] || isNaN(a) || isNaN(b)) {
+        return NaN;
+    }
+
+    return this.methods[op](a, b);
+    };
+    }
+
+    //let calc = new Calculator;
+
+    //alert( calc.calculate("2 ** 4") );
+
+    //Ex 7 - Map to names
+    // let john = { name: "John", age: 25 };
+    // let pete = { name: "Pete", age: 30 };
+    // let mary = { name: "Mary", age: 28 };
+
+    // let users = [ john, pete, mary ];
+
+    // let names = users.map(item => item.name);
+
+    //alert( names ); // John, Pete, Mary
+
+    //Ex 8 - Map to objects
+    // let john = { name: "John", surname: "Smith", id: 1 };
+    // let pete = { name: "Pete", surname: "Hunt", id: 2 };
+    // let mary = { name: "Mary", surname: "Key", id: 3 };
+
+    // let users = [ john, pete, mary ];
+
+    // let usersMapped = users.map( function item(users){
+    //     let user = {fullName: `${users.name} ${users.surname}`, id: users.id};
+    //     return user;
+    // });
+
+    // alert( usersMapped[0].id ) // 1
+    // alert( usersMapped[0].fullName ) // John Smith
+
+    //Ex 9 - Sort users by age
+    // let john = { name: "John", age: 25 };
+    // let pete = { name: "Pete", age: 30 };
+    // let mary = { name: "Mary", age: 28 };
+
+    // let arr = [ pete, john, mary ];
+
+    function sortByAge(arr){
+        arr.sort((a, b) => a.age - b.age);
+    }
+
+    // sortByAge(arr);
+
+    // // now: [john, mary, pete]
+    // alert(arr[0].name); // John
+    // alert(arr[1].name); // Mary
+    // alert(arr[2].name); // Pete
+
+    //Ex 10 - Shuffle an array
+    //let arr = [1, 2, 3];
+
+    //Using Fisher-Yates shuffle algorithm
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+
+            // swap elements array[i] and array[j]
+            // we use "destructuring assignment" syntax to achieve that
+            // you'll find more details about that syntax in later chapters
+            // same can be written as:
+            // let t = array[i]; array[i] = array[j]; array[j] = t
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // shuffle(arr);
+    // alert(arr);
+
+    //Ex 11 - Get average age
+    // let john = { name: "John", age: 25 };
+    // let pete = { name: "Pete", age: 30 };
+    // let mary = { name: "Mary", age: 29 };
+
+    // let arr = [ john, pete, mary ];
+
+    function getAverageAge(arr){
+        let sum = 0;
+        for (let i = 0; i < arr.length; i++){
+            sum = sum + arr[i]['age'];
+        }
+        return sum/arr.length;
+    }
+    //Simpler function option, using reduce() method
+    // function getAverageAge(users) {
+    //     return users.reduce((prev, user) => prev + user.age, 0) / users.length;
+    // }
+
+    // alert( getAverageAge(arr) ); // (25 + 30 + 29) / 3 = 28
+
+    //Ex 12 - Filter unique array members
+    function unique(arr) {
+        return Array.from(new Set(arr));
+    }
+
+    // let strings = ["Hare", "Krishna", "Hare", "Krishna", "Krishna", "Krishna", "Hare", "Hare", ":-O"];
+
+    // alert( unique(strings) ); // Hare, Krishna, :-O
+
+    //Ex 13 - Create keyed object from array
+    let users = [
+    {id: 'john', name: "John Smith", age: 20},
+    {id: 'ann', name: "Ann Smith", age: 24},
+    {id: 'pete', name: "Pete Peterson", age: 31},
+    ];
+
+    function groupById(users){
+       return users.reduce((obj, item) => {
+       obj[item['id']] = item;
+       return obj;
+    }, {});
+    }
+
+    let usersById = groupById(users);
+
+    console.log(usersById);
+
+    /*
+    // after the call we should have:
+
+    usersById = {
+    john: {id: 'john', name: "John Smith", age: 20},
+    ann: {id: 'ann', name: "Ann Smith", age: 24},
+    pete: {id: 'pete', name: "Pete Peterson", age: 31},
+    }
+    */
+
+    </script>
+</body>
+</html>
